@@ -275,7 +275,11 @@ cite ()
 
   typeset keyword
   for keyword in "$@"; do
-    eval "$keyword() { :; }"
+    if shopt -q expand_aliases; then
+      alias "${keyword}"=": _$keyword"
+    else
+      eval "$keyword() { :; }"
+    fi
   done
 }
 
