@@ -206,7 +206,7 @@ _generate_metadata_functions() {
   typeset f
   for f in "${_composure_keywords[@]}"
   do
-    eval "$f() { :; }"
+    type "$f" > /dev/null || eval "$f() { :; }"
   done
 }
 
@@ -272,7 +272,7 @@ cite ()
 
   typeset keyword
   for keyword in "$@"; do
-    if shopt -q expand_aliases; then
+    type "$keyword" > /dev/null || if shopt -q expand_aliases; then
       alias "${keyword}"=": _$keyword"
     else
       eval "$keyword() { :; }"
@@ -517,7 +517,7 @@ echo "#!/usr/bin/env ${SHELL##*/}"
 cat <<END
 for f in "${_composure_keywords[@]}"
 do
-  eval "\$f() { :; }"
+  type "$f" >/dev/null || eval "\$f() { :; }"
 done
 unset f
 END
